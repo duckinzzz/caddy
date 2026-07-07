@@ -1,0 +1,30 @@
+services:
+  caddy-proxy:
+    image: ${CADDY_IMAGE}
+    container_name: caddy-proxy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CADDY_INGRESS_NETWORKS=${CADDY_INGRESS_NETWORKS}
+      - CADDY_DOCKER_CADDYFILE_PATH=${CADDY_DOCKER_CADDYFILE_PATH}
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - CADDY_EMAIL=${CADDY_EMAIL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy-proxy
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  caddy-proxy:
+    external: true
