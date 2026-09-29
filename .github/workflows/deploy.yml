@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - "**.md"
   workflow_dispatch:
 
 permissions:
@@ -49,7 +51,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # /srv/caddy на сервере — git-клон этого репозитория, поэтому конфиг
+      # /srv/caddy на сервере: git-клон этого репозитория, поэтому конфиг
       # приезжает через git. Caddyfile монтируется в контейнер с диска,
       # в образ он не попадает. .env не отслеживается git и не затирается.
       - name: Deploy to server
